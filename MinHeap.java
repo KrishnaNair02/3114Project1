@@ -105,3 +105,11 @@ public class MinHeap {
     }
 
 }
+
+public void heapifyUp() {
+    
+}
+
+public void heapifyDown() {
+    
+}
