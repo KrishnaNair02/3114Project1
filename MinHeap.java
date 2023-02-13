@@ -81,7 +81,6 @@ public class MinHeap {
         	intNodes[i] = nodes[i].getValue();
         }
         return intNodes;
-        return null;
     }
 
 
