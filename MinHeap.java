@@ -103,13 +103,13 @@ public class MinHeap {
         }
         return sb.toString();
     }
-
-}
-
-public void heapifyUp() {
     
-}
-
-public void heapifyDown() {
+    private void heapifyUp() {
+        
+    }
+    
+    private void heapifyDown() {
+    
+    }
     
 }
