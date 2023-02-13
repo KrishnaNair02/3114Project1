@@ -75,7 +75,12 @@ public class MinHeap {
      * @return the array representation of heap
      */
     public int[] getHeap() {
-        // TODO complete
+        int[] intNodes = new int[nodes.length];
+        for (int i = 0; i < nodes.length; i++)
+        {
+        	intNodes[i] = nodes[i].getValue();
+        }
+        return intNodes;
         return null;
     }
 
