@@ -59,7 +59,12 @@ public class MinHeap {
      *         you should return the array [5, 1]
      */
     public int[] extractMin() {
-        // TODO complete
+        int[] minArr = new int[2];
+        minArr[0] = nodes[0].getId();
+        minArr[1] = nodes[0].getValue();
+        nodes[0] = nodes[size];
+        heapifyDown(0);
+    	return minArr;
         return null;
     }
 
@@ -129,6 +134,27 @@ public class MinHeap {
             index = parent;
         }
         return index;
+    }
+    
+    public void heapifyDown(int location) {
+    	HeapNode temp;
+    	int lowest = (d * location) + 1;
+    	int arrayLength = nodes.length;
+    	if (d*location + 1 > arrayLength) {
+    		return;
+    	}
+    	for (int remainder = 0; remainder < d; remainder++) {
+    		int currChild = (d * location) + remainder + 1;
+    		if (nodes[currChild].getValue() < nodes[lowest].getValue()) {
+    			lowest = currChild;
+    		}
+    	}
+    	if (nodes[lowest].getValue() < nodes[location].getValue()) {
+    		temp = nodes[location];
+    		nodes[location] = nodes[lowest];
+    		nodes[lowest] = temp;
+    		heapifyDown(lowest);
+    	}
     }
 
 }
