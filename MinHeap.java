@@ -9,9 +9,12 @@ package prj1;
 public class MinHeap {
     // The parameter d in the d-ary min-heap
     private int d;
+    private int size;
 
     // The array representation of your min-heap (It is not required to use this)
     private HeapNode[] nodes;
+    // The auxiliary array that stores the location of nodes by ids
+    private int[] location;
 
     /**
      * Constructor
@@ -23,7 +26,12 @@ public class MinHeap {
      */
     public MinHeap(int n, int d) {
         nodes = new HeapNode[n];
+        location = new int[n];
+        for (int i = 0; i < n; i ++)
+            location[i] = -1;
+        
         this.d = d;
+        this.size = 0;
     }
 
 
@@ -34,7 +42,10 @@ public class MinHeap {
      * @param value
      */
     public void insert(int id, int value) {
-        // TODO complete
+        nodes[size] = new HeapNode(id, value);
+        int index = this.heapifyup(size);
+        location[id] = index;
+        size ++;
     }
 
 
@@ -61,11 +72,10 @@ public class MinHeap {
      * @param newValue
      */
     public void decreaseKey(int id, int newValue) {
-        for (int i = 0; i < nodes.length; i++) {
-        	if (nodes[i].getId() == id) {
-        		nodes[i].setValue(newValue);
-        	}
-        }
+        int index = location[id];
+        nodes[index].setValue(newValue);
+        index = this.heapifyup(index);
+        location[id] = index;
     }
 
 
@@ -78,7 +88,7 @@ public class MinHeap {
         int[] intNodes = new int[nodes.length];
         for (int i = 0; i < nodes.length; i++)
         {
-        	intNodes[i] = nodes[i].getValue();
+            intNodes[i] = nodes[i].getValue();
         }
         return intNodes;
     }
@@ -103,12 +113,22 @@ public class MinHeap {
         return sb.toString();
     }
     
-    private void heapifyUp() {
-        
+    private int heapifyup(int indexInit) {
+        int index = indexInit;
+        int parent;
+        while (index > 0) {
+            parent = (index - 1) / d;
+            if (nodes[index].getValue() < nodes[parent].getValue()) {
+                HeapNode temp = nodes[index];
+                nodes[index] = nodes[parent];
+                nodes[parent] = temp;
+            }
+            else {
+                break;
+            }
+            index = parent;
+        }
+        return index;
     }
-    
-    private void heapifyDown() {
-    
-    }
-    
+
 }
