@@ -145,7 +145,7 @@ public class MinHeap {
     	}
     	for (int remainder = 0; remainder < d; remainder++) {
     		int currChild = (d * location) + remainder + 1;
-    		if (nodes[currChild].getValue() < nodes[lowest].getValue()) {
+    		if (nodes[currChild].getValue() < nodes[lowest].getValue() && currChild <= arrayLength) {
     			lowest = currChild;
     		}
     	}
