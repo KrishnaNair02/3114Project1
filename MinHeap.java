@@ -62,10 +62,11 @@ public class MinHeap {
         int[] minArr = new int[2];
         minArr[0] = nodes[0].getId();
         minArr[1] = nodes[0].getValue();
-        nodes[0] = nodes[size];
+        nodes[0] = nodes[size - 1];
+        nodes[size - 1] = null;
+        size--;
         heapifyDown(0);
     	return minArr;
-        return null;
     }
 
 
@@ -136,22 +137,22 @@ public class MinHeap {
         return index;
     }
     
-    public void heapifyDown(int location) {
+    public void heapifyDown(int root) {
     	HeapNode temp;
-    	int lowest = (d * location) + 1;
     	int arrayLength = nodes.length;
-    	if (d*location + 1 > arrayLength) {
+    	if (d*root + 1 > arrayLength) {
     		return;
     	}
+    	int lowest = (d * root) + 1;
     	for (int remainder = 0; remainder < d; remainder++) {
-    		int currChild = (d * location) + remainder + 1;
-    		if (nodes[currChild].getValue() < nodes[lowest].getValue() && currChild <= arrayLength) {
+    		int currChild = (d * root) + remainder + 1;
+    		if (nodes[currChild].getValue() < nodes[lowest].getValue() && currChild < arrayLength) {
     			lowest = currChild;
     		}
     	}
-    	if (nodes[lowest].getValue() < nodes[location].getValue()) {
-    		temp = nodes[location];
-    		nodes[location] = nodes[lowest];
+    	if (nodes[lowest].getValue() < nodes[root].getValue()) {
+    		temp = nodes[root];
+    		nodes[root] = nodes[lowest];
     		nodes[lowest] = temp;
     		heapifyDown(lowest);
     	}
