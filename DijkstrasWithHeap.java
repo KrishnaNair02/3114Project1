@@ -14,8 +14,7 @@ public class DijkstrasWithHeap {
     private int[] distances;
     private boolean[] explored;
     private MinHeap biMH;
-    private int[][] edges;
-    private ArrayList<Integer>[] adjEdges;
+    private ArrayList<Integer[]>[] adjEdges;
 
     /**
      * Constructor of the class
@@ -32,8 +31,7 @@ public class DijkstrasWithHeap {
     public DijkstrasWithHeap(int n, int[][] edges) {
         distances = new int[n];
         explored = new boolean[n];
-        biMH = new MinHeap(edges.length , 2);
-        this.edges = edges;
+        biMH = new MinHeap(n, 2);
         adjEdges = new ArrayList[n];
         
         // initialize the arrays set to infinite (-1) and unexplored
@@ -42,10 +40,15 @@ public class DijkstrasWithHeap {
             explored[i] = false;
             
             // populate the adjacency list
-            adjEdges[i] = new ArrayList<Integer>();
-            for (int j = 1; j <= edges.length; j ++) {
+            adjEdges[i] = new ArrayList<Integer[]>();
+            for (int j = 1, index = 0; j <= edges.length; j ++) {
                 if (edges[j-1][0] == i+1 || edges[j-1][1] == i+1) {
-                    adjEdges[i].add(j);
+                    adjEdges[i].add(new Integer[2]);
+                    adjEdges[i].get(index)[0] = edges[j-1][0];
+                    if (edges[j-1][0] == i+1)
+                        adjEdges[i].get(index)[0] = edges[j-1][1];
+                    adjEdges[i].get(index)[1] = edges[j-1][2];
+                    index ++;
                 }
             }
         }
@@ -66,8 +69,6 @@ public class DijkstrasWithHeap {
     public int[] run(int source) {
         int[] minEdge;
         int sourceIndex = source - 1;
-        int nextIndex;
-        int nextNeighborIndex;
         int currentIndex;
         
         // explored the source
@@ -75,31 +76,29 @@ public class DijkstrasWithHeap {
         explored[sourceIndex] = true;
         currentIndex = sourceIndex;
         
-        do {
-         // populate the binary heap
+        for (int i = 0; i < adjEdges[currentIndex].size(); i ++) {
+            biMH.insert(adjEdges[currentIndex].get(i)[0], adjEdges[currentIndex].get(i)[1]);
+        }
+        
+        while (biMH.getSize() != 0) {
+         // populate the binary heap           
+            minEdge = biMH.extractMin();
+            currentIndex = minEdge[0] - 1;
+                
+            distances[currentIndex] = minEdge[1];
+            explored[currentIndex] = true;
+            
             for (int i = 0; i < adjEdges[currentIndex].size(); i ++) {
-                biMH.insert(adjEdges[currentIndex].get(i), edges[adjEdges[currentIndex].get(i) - 1][2]);
-                nextNeighborIndex = edges[adjEdges[currentIndex].get(i) - 1][1] - 1;
-                if (nextNeighborIndex == currentIndex)
-                    nextNeighborIndex = edges[adjEdges[currentIndex].get(i) - 1][0] - 1;
-                if (distances[nextNeighborIndex] == -1 || distances[nextNeighborIndex] > distances[currentIndex] + edges[adjEdges[currentIndex].get(i) - 1][2]) {
-                    distances[nextNeighborIndex] = distances[currentIndex] + edges[adjEdges[currentIndex].get(i) - 1][2];
-                    
+                if (!explored[adjEdges[currentIndex].get(i)[0] - 1]) {
+                    if (biMH.getLocation(adjEdges[currentIndex].get(i)[0]) != -1) {
+                        biMH.decreaseKey(adjEdges[currentIndex].get(i)[0], distances[currentIndex] + adjEdges[currentIndex].get(i)[1]);
+                    }
+                    else {
+                        biMH.insert(adjEdges[currentIndex].get(i)[0], distances[currentIndex] + adjEdges[currentIndex].get(i)[1]);
+                    }
                 }
             }
-            
-            do {
-                minEdge = biMH.extractMin();
-                nextIndex = edges[minEdge[0] - 1][1] - 1;
-                if (nextIndex == currentIndex)
-                    nextIndex = edges[minEdge[0] - 1][0] - 1;
-            }
-            while (explored[nextIndex] && biMH.getSize() > 0);
-                
-            explored[nextIndex] = true;
-            currentIndex = nextIndex;
         }
-        while (biMH.getSize() != 0);
         
         return distances;
     }

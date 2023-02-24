@@ -27,9 +27,9 @@ public class MinHeap {
     public MinHeap(int n, int d) {
         nodes = new HeapNode[n];
         location = new int[n+1];
-        for (int i = 0; i <= n; i ++)
+        for (int i = 0; i <= n; i ++) {
             location[i] = -1;
-        
+        }
         this.d = d;
         this.size = 0;
     }
@@ -106,6 +106,10 @@ public class MinHeap {
     public int getSize() {
         return size;
     }
+    
+    public int getLocation(int id) {
+        return location[id];
+    }
 
 
     /**
@@ -145,7 +149,6 @@ public class MinHeap {
             }
             index = parent;
         }
-        return;
     }
     
     public void heapifyDown(int index) {
@@ -155,9 +158,8 @@ public class MinHeap {
         if (lowest >= arrayLength) {
             return;
         }
-        for (int remainder = 0; remainder < d; remainder++) {
-            int currChild = (d * index) + remainder + 1;
-            if (nodes[currChild].getValue() < nodes[lowest].getValue() && currChild < arrayLength) {
+        for (int currChild = lowest + 1; currChild < lowest + d && currChild < arrayLength; currChild++) {
+            if (nodes[currChild].getValue() < nodes[lowest].getValue()) {
                 lowest = currChild;
             }
         }
