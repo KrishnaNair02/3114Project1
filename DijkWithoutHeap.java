@@ -45,9 +45,9 @@ public class DijkstrasWithoutHeap {
         for (int i = 0; i < size; i++) {
         	for (int j = 0; j < edges.length; j++) {
         		if (edges[j][0] == i + 1) {
-            		graph[i][edges[j][1] - 1] = edges[i][2];
-            		graph[edges[j][1] - 1][i] = edges[i][2];
-            	}
+            			graph[i][edges[j][1] - 1] = edges[i][2];
+            			graph[edges[j][1] - 1][i] = edges[i][2];
+            		}
         	}
         }
         int distArray[] = new int[size];
