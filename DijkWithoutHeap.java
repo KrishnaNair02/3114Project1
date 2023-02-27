@@ -45,18 +45,22 @@ public class DijkstrasWithoutHeap {
         for (int i = 0; i < size; i++) {
         	for (int j = 0; j < edges.length; j++) {
         		if (edges[j][0] == i + 1) {
-            			graph[i][edges[j][1] - 1] = edges[i][2];
-            			graph[edges[j][1] - 1][i] = edges[i][2];
+            			graph[i][edges[j][1] - 1] = edges[j][2];
+            			graph[edges[j][1] - 1][i] = edges[j][2];
             		}
         	}
         }
+		/*
+		 * for (int i = 0; i < size; i++) { for (int j = 0; j < size; j++) {
+		 * System.out.println(graph[i][j] + " "); } System.out.println("\n"); }
+		 */
         int distArray[] = new int[size];
         Boolean processed[] = new Boolean[size];
         for (int i = 0; i < size; i++) {
         	distArray[i] = Integer.MAX_VALUE;
         	processed[i] = false;
         }
-        distArray[source] = 0;
+        distArray[source - 1] = 0;
         for (int j = 0; j < size - 1; j++) {
         	int minVal = Integer.MAX_VALUE;
         	int minInd = -1;
@@ -69,10 +73,15 @@ public class DijkstrasWithoutHeap {
         	int lowInd = minInd;
         	processed[lowInd] = true;
         	for (int k = 0; k < size; k++) {
-        		if (!processed[k] && graph[lowInd][k] != 0 && distArray[lowInd] != Integer.MAX_VALUE
-        				&& distArray[lowInd] + graph[lowInd][k] < distArray[lowInd]) { 
+        		if (!processed[k] && distArray[lowInd] != Integer.MAX_VALUE && graph[lowInd][k] != 0 
+        				&& distArray[lowInd] + graph[lowInd][k] < distArray[k]) { 
         			distArray[k] = distArray[lowInd] + graph[lowInd][k];
         		}
+        	}
+        }
+        for (int i = 0; i < distArray.length; i++) {
+        	if (distArray[i] == Integer.MAX_VALUE) {
+        		distArray[i] = -1;
         	}
         }
         return distArray;
